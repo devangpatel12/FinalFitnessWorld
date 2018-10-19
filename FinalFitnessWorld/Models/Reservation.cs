@@ -10,7 +10,7 @@ namespace FinalFitnessWorld.Models
     {
         public int Id { get; set; }
 
-        [Required]
+        //[Required]
         [StringLength(128)]
         public string Customer { get; set; }
 
@@ -25,7 +25,7 @@ namespace FinalFitnessWorld.Models
 
         public TimeSpan Time { get; set; }
 
-        [Required]
+        //[Required]
         [StringLength(50)]
         public string ReservationStatus { get; set; }
 

@@ -89,6 +89,15 @@ namespace FinalFitnessWorld.Controllers
             return View(branch);
         }
 
+        //custom code
+        public JsonResult GetBranchList()
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            List<Branch> BranchList = db.Branches.ToList();
+            return Json(BranchList, JsonRequestBehavior.AllowGet);
+        }
+        //custom code
+
         // GET: Branches/Delete/5
         public ActionResult Delete(int? id)
         {

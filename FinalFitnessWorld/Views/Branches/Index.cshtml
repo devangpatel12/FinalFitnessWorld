@@ -5,54 +5,155 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+<h3>My Google Maps Demo</h3>
+<!--The div element for the map -->
+<p id="message"></p>
+<div id="map"></div>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Address)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Description)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.latitude)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.longitude)
-        </th>
-        <th></th>
-    </tr>
+@if (User.IsInRole("admin"))
+{
+    <h2>Index</h2>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Address)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Description)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.latitude)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.longitude)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Address)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.latitude)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.longitude)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.latitude)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.longitude)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                </td>
+            </tr>
+        }
+
+    </table>
 }
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+        <script src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-1.9.0.js"></script>
+        <script type="text/javascript">
+        var map;
+        function initMap() {
 
-</table>
+            //To find the current location and add the marker of current location
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition, showError);
+            }
+            else { $("#message").html("Geolocation is not supported by this browser."); }
+
+            function showPosition(position) {
+                var currentLatLng = position.coords;
+
+                var latlon = "Latitude" + currentLatLng.latitude + "," + "Longitude" + currentLatLng.longitude;
+
+                //Google map options like langitude, latitude and zoom level
+                var mapOptions = {
+                    center: new google.maps.LatLng(currentLatLng.latitude, currentLatLng.longitude),
+                    zoom: 12,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                };
+
+                //Get the element of div to show google maps
+                map = new google.maps.Map(document.getElementById("map"),
+                    mapOptions);
+                var marker = new google.maps.Marker({
+                    // position: { lat: -36.8880, lng: 144.06 },
+                    //position: location,
+                    position: { lat: currentLatLng.latitude, lng: currentLatLng.longitude },
+                    map: map,
+                    title: "Your Location"
+                });
+                $.get("@Url.Action("GetBranchList","Branches")", function (data, status) {
+                    var marker = [];
+                    var contentString = [];
+                    var infowindow = [];
+                    for (var i = 0; i < data.length; i++) {
+
+                        //alert([ data[i].latitude, data[i].longitude ])
+                        //var location = new google.maps.LatLng(data[i].latitude, data[i].longitude);
+                        marker[i] = new google.maps.Marker({
+                            // position: { lat: -36.8880, lng: 144.06 },
+                            //position: location,
+                            position: { lat: data[i].latitude, lng: data[i].longitude },
+                            map: map,
+                            title: "Click to View Details"
+                        });
+                        contentString[i] = "<div style='height:60px;width:250px'><h4>" + data[i].Name + "</h4><b> <a href='/Branches/Details/" + data[i].Id + "'>Details</a></b></div>";
+                        infowindow[i] = new google.maps.InfoWindow({
+                            content: contentString[i]
+                        });
+                        var mdl = marker[i];
+                        google.maps.event.addListener(marker[i], 'click', (function (mdl, i) {
+                            return function () {
+                                infowindow[i].open(map, marker[i]);
+                            }
+                        })(marker[i], i));
+
+                    }
+                });
+            }
+                //show error formats incase the location is not found.
+                function showError(error) {
+                    if (error.code == 1) {
+                        $("#message").html("User denied the request for Geolocation.");
+                    }
+                    else if (error.code == 2) {
+                        $("#message").html("Location information is unavailable.");
+                    }
+                    else if (error.code == 3) {
+                        $("#message").html("The request to get user location timed out.");
+                    }
+                    else {
+                        $("#message").html("An unknown error occurred.");
+                    }
+                }
+        }
+
+
+        </script>
+        <!--Load the API from the specified URL
+        * The async attribute allows the browser to render the page while the API loads
+        * The key parameter will contain your own API key (which is not needed for this tutorial)
+        * The callback parameter executes the initMap() function
+        -->
+        <script async defer
+                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSicQWRrIDaaH0ESOM3eKSsERxJhtvCRk&callback=initMap">
+        </script>
+    }

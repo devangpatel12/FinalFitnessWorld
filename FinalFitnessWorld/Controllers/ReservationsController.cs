@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using FinalFitnessWorld.Models;
+using Microsoft.AspNet.Identity;
 
 namespace FinalFitnessWorld.Controllers
 {
@@ -35,23 +36,66 @@ namespace FinalFitnessWorld.Controllers
             }
             return View(reservation);
         }
+        /*
+                // GET: Reservations/Create
+                public ActionResult Create()
+                {
+                    ViewBag.Branch = new SelectList(db.Branches, "Id", "Name");
+                    ViewBag.Customer = new SelectList(db.Customers, "Id", "Name");
+                    ViewBag.Trainer = new SelectList(db.Trainers, "Id", "Name");
+                    return View();
+                }
+
+                // POST: Reservations/Create
+                // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+                // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+                [HttpPost]
+                [ValidateAntiForgeryToken]
+                public ActionResult Create([Bind(Include = "Id,Customer,Branch,Trainer,Date,Time,ReservationStatus")] Reservation reservation)
+                {
+                    if (ModelState.IsValid)
+                    {
+                        db.Reservations.Add(reservation);
+                        db.SaveChanges();
+                        return RedirectToAction("Index");
+                    }
+
+                    ViewBag.Branch = new SelectList(db.Branches, "Id", "Name", reservation.Branch);
+                    ViewBag.Customer = new SelectList(db.Customers, "Id", "Name", reservation.Customer);
+                    ViewBag.Trainer = new SelectList(db.Trainers, "Id", "Name", reservation.Trainer);
+                    return View(reservation);
+                }
+        */
 
         // GET: Reservations/Create
         public ActionResult Create()
         {
             ViewBag.Branch = new SelectList(db.Branches, "Id", "Name");
-            ViewBag.Customer = new SelectList(db.Customers, "Id", "Name");
-            ViewBag.Trainer = new SelectList(db.Trainers, "Id", "Name");
+            //ViewBag.Customer = new SelectList(db.Customers, "Id", "Name");
+            ViewBag.Trainer = new SelectList(" ");
             return View();
         }
+
+        //custom code
+        public JsonResult GetTrainerList(int Branch)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            List<Trainer> TrainerList = db.Trainers.Where(x => x.Branch == Branch).ToList();
+            return Json(TrainerList, JsonRequestBehavior.AllowGet);
+        }
+        //custom code
+
 
         // POST: Reservations/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Customer,Branch,Trainer,Date,Time,ReservationStatus")] Reservation reservation)
+        [Authorize]
+        public ActionResult Create([Bind(Include = "Branch,Trainer,Date,Time")] Reservation reservation)
         {
+            reservation.Customer = User.Identity.GetUserId();
+            reservation.ReservationStatus = "Waiting For Approval";
             if (ModelState.IsValid)
             {
                 db.Reservations.Add(reservation);
@@ -60,8 +104,8 @@ namespace FinalFitnessWorld.Controllers
             }
 
             ViewBag.Branch = new SelectList(db.Branches, "Id", "Name", reservation.Branch);
-            ViewBag.Customer = new SelectList(db.Customers, "Id", "Name", reservation.Customer);
-            ViewBag.Trainer = new SelectList(db.Trainers, "Id", "Name", reservation.Trainer);
+            //ViewBag.Customer = new SelectList(db.Customers, "Id", "Name", reservation.Customer);
+            ViewBag.Trainer = new SelectList(db.Trainers.Where(x => x.Branch == reservation.Branch), "Id", "Name", reservation.Trainer);
             return View(reservation);
         }
 

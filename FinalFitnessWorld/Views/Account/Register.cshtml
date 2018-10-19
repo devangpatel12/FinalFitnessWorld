@@ -72,13 +72,13 @@
             google.maps.event.addListener(autocomplete, 'place_changed', function () {
                 var place = autocomplete.getPlace();
                 document.getElementById('latitude').value = place.geometry.location.lat()
-                alert(document.getElementById('latitude').value)
+                //alert(document.getElementById('latitude').value)
                 document.getElementById('longitude').value = place.geometry.location.lng()
-                alert(document.getElementById('longitude').value)
-            });
+                //alert(document.getElementById('longitude').value)
+            });     
 
         }
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDM1Uz2zCv3Imwm_mso2E7XeoKOcSCDq5w&libraries=places&callback=initAutocomplete"
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSicQWRrIDaaH0ESOM3eKSsERxJhtvCRk&libraries=places&callback=initAutocomplete"
             async defer></script>
 }
