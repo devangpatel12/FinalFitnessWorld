@@ -14,12 +14,14 @@ namespace FinalFitnessWorld.Models
             Reservations = new HashSet<Reservation>();
         }
 
+        [Required]
         public string Id { get; set; }
 
-        [Required]
+        //[Required]
+        [Display(Name = "Trainer Name")]
         public string Name { get; set; }
 
-        [Required]
+        //[Required]
         [StringLength(256)]
         public string Email { get; set; }
 

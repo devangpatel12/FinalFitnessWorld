@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FinalFitnessWorld.Models
 {
@@ -64,6 +65,26 @@ namespace FinalFitnessWorld.Models
 
     public class RegisterViewModel
     {
+        [Required]
+        [Display(Name = "Name")]
+        public string Name { get; set; }
+        
+        //custom code
+        [Required]
+        [Display(Name = "Address")]
+        public string Address { get; set; }
+
+        [Column(TypeName = "numeric")]
+        public decimal latitude { get; set; }
+
+        [Column(TypeName = "numeric")]
+        public decimal longitude { get; set; }
+
+        [Required]
+        [Display(Name = "Phone No")]
+        public int PhoneNo { get; set; }
+        //custom code
+
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]

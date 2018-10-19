@@ -18,6 +18,10 @@ namespace FinalFitnessWorld.Controllers
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
+        //custom code
+        private ReservationModels db = new ReservationModels();
+        //custom code
+
         public AccountController()
         {
         }
@@ -157,6 +161,13 @@ namespace FinalFitnessWorld.Controllers
                 {
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
                     
+                    //custom code
+                    Customer customer = new Customer { Id = user.Id, Name = model.Name, Email = model.Email, PhoneNo = model.PhoneNo, Address = model.Address,latitude = model.latitude, longitude = model.longitude };
+
+                    db.Customers.Add(customer);
+                    db.SaveChanges();
+                    //custom code
+
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);

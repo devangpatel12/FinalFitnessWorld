@@ -8,10 +8,10 @@
 <h2>Create</h2>
 
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>Branch</h4>
         <hr />
@@ -70,4 +70,20 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        function initAutocomplete() {
+            var autocomplete = new google.maps.places.Autocomplete(document.getElementById('Address'));
+
+            google.maps.event.addListener(autocomplete, 'place_changed', function () {
+                var place = autocomplete.getPlace();
+                document.getElementById('latitude').value = place.geometry.location.lat()
+                    alert(document.getElementById('latitude').value)
+                document.getElementById('longitude').value = place.geometry.location.lng()
+                    alert(document.getElementById('longitude').value)
+            });
+
+        }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDM1Uz2zCv3Imwm_mso2E7XeoKOcSCDq5w&libraries=places&callback=initAutocomplete"
+            async defer></script>
 }

@@ -39,6 +39,10 @@ namespace FinalFitnessWorld.Controllers
         // GET: Trainers/Create
         public ActionResult Create()
         {
+            //custom code
+            ViewBag.Id = new SelectList(db.Customers, "Id", "Email");
+            //custom code
+
             ViewBag.Branch = new SelectList(db.Branches, "Id", "Name");
             return View();
         }
@@ -48,15 +52,23 @@ namespace FinalFitnessWorld.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,Email,PhoneNo,Branch")] Trainer trainer)
+        public ActionResult Create([Bind(Include = "Id,Branch")] Trainer trainer)
         {
             if (ModelState.IsValid)
             {
+                //custom code
+                Customer customer = db.Customers.Find(trainer.Id);
+                db.Customers.Remove(customer);
+                trainer.Name = customer.Name;
+                trainer.Email = customer.Email;
+                trainer.PhoneNo = customer.PhoneNo;
+                //custom code
+
                 db.Trainers.Add(trainer);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-
+            ViewBag.Id = new SelectList(db.Customers, "Id", "Email", trainer.Id);
             ViewBag.Branch = new SelectList(db.Branches, "Id", "Name", trainer.Branch);
             return View(trainer);
         }
