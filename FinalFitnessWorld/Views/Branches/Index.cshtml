@@ -18,45 +18,48 @@
         @Html.ActionLink("Add New Branch", "Create")
     </p>
     <table class="table">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Address)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th></th>
-        </tr>
-
-        @foreach (var item in Model)
-        {
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Address)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Description)
-                </td>
-                <td>
-                    @Html.ActionLink("Edit Details", "Edit", new { id = item.Id }) |
-                    @Html.ActionLink("View Details", "Details", new { id = item.Id }) |
-                    @Html.ActionLink("Remove Branch", "Delete", new { id = item.Id })
-                </td>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Address)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Description)
+                </th>
+                <th></th>
             </tr>
-        }
+        </thead>
+        <tbody>
 
+            @foreach (var item in Model)
+            {
+                <tr class="info">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Address)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit Details", "Edit", new { id = item.Id }) |
+                        @Html.ActionLink("View Details", "Details", new { id = item.Id }) |
+                        @Html.ActionLink("Remove Branch", "Delete", new { id = item.Id })
+                    </td>
+                </tr>
+            }
+        </tbody>
     </table>
 }
-    @section Scripts {
-        @Scripts.Render("~/bundles/jqueryval")
-        <script src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-1.9.0.js"></script>
-        <script type="text/javascript">
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-1.9.0.js"></script>
+    <script type="text/javascript">
         var map;
         function initMap() {
 
@@ -137,13 +140,21 @@
         }
 
 
-        </script>
-        <!--Load the API from the specified URL
-        * The async attribute allows the browser to render the page while the API loads
-        * The key parameter will contain your own API key (which is not needed for this tutorial)
-        * The callback parameter executes the initMap() function
-        -->
-        <script async defer
-                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSicQWRrIDaaH0ESOM3eKSsERxJhtvCRk&sensor=false&libraries=places&region=AU&callback=initMap">
-        </script>
-    }
+    </script>
+    <!--Load the API from the specified URL
+    * The async attribute allows the browser to render the page while the API loads
+    * The key parameter will contain your own API key (which is not needed for this tutorial)
+    * The callback parameter executes the initMap() function
+    -->
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSicQWRrIDaaH0ESOM3eKSsERxJhtvCRk&sensor=false&libraries=places&region=AU&callback=initMap">
+    </script>
+
+    @Scripts.Render("~/Scripts/DataTables/jquery.dataTables.js")
+    @Scripts.Render("~/Scripts/DataTables/dataTables.bootstrap.js")
+    <script>
+        $(document).ready(function () {
+            $('.table').DataTable();
+        });
+    </script>
+}
