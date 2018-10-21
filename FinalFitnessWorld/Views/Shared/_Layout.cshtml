@@ -9,7 +9,7 @@
 
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar navbar-default navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -17,19 +17,24 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Fitness World", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Html.ActionLink("About", "About", "Home")</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                    @if (User.Identity.IsAuthenticated)
+                    @if (User.IsInRole("customer"))
                     {
-                        <li>@Html.ActionLink("Reservations", "Index", "Reservations")</li>
+                        <li>@Html.ActionLink("New Reservation", "Create", "Reservations")</li>
+                    }
+                    @if (User.IsInRole("customer") | User.IsInRole("trainer"))
+                    {
+                        <li>@Html.ActionLink("My Reservations", "Index", "Reservations")</li>
                     }
                     @if (User.IsInRole("admin"))
                     {
+                        <li>@Html.ActionLink("Reservations", "Index", "Reservations")</li>
                         <li>@Html.ActionLink("Customers", "Index", "Customers")</li>
                         <li>@Html.ActionLink("Trainers", "Index", "Trainers")</li>
                     }
@@ -44,7 +49,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            <p>&copy; @DateTime.Now.Year - Fitness World</p>
         </footer>
     </div>
 

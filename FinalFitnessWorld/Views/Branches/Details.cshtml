@@ -34,26 +34,12 @@
         <dd>
             @Html.DisplayFor(model => model.Description)
         </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.latitude)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.latitude)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.longitude)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.longitude)
-        </dd>
-
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
+    @if (User.IsInRole("admin"))
+    {
+        @Html.ActionLink("Edit Details", "Edit", new { id = Model.Id })
+    }
+    | @Html.ActionLink("Back to Map View", "Index")
 </p>

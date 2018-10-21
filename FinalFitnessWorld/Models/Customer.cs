@@ -17,14 +17,15 @@ namespace FinalFitnessWorld.Models
         public string Id { get; set; }
 
         [Required]
+        [Display(Name = "Customer Name")]
         public string Name { get; set; }
 
         [Required]
         [StringLength(256)]
         public string Email { get; set; }
 
-        [Column(TypeName = "numeric")]
-        public decimal? PhoneNo { get; set; }
+        
+        public int? PhoneNo { get; set; }
 
         [Required]
         public string Address { get; set; }

@@ -11,6 +11,7 @@ using Microsoft.AspNet.Identity;
 
 namespace FinalFitnessWorld.Controllers
 {
+    [Authorize]
     public class ReservationsController : Controller
     {
         private ReservationModels db = new ReservationModels();
@@ -18,7 +19,16 @@ namespace FinalFitnessWorld.Controllers
         // GET: Reservations
         public ActionResult Index()
         {
+            var userId = User.Identity.GetUserId();
             var reservations = db.Reservations.Include(r => r.Branch1).Include(r => r.Customer1).Include(r => r.Trainer1);
+            if (User.IsInRole("trainer"))
+            {
+                reservations = db.Reservations.Where(s => s.Trainer == userId);
+            }
+            else if (User.IsInRole("customer"))
+            {
+                reservations = db.Reservations.Where(s => s.Customer == userId);
+            }
             return View(reservations.ToList());
         }
 
@@ -85,17 +95,25 @@ namespace FinalFitnessWorld.Controllers
         }
         //custom code
 
+        //custom code
+        public JsonResult GetReservationList(DateTime date,String trainer)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            List<Reservation> ReservationList = db.Reservations.Where(x => x.Date == date && x.Trainer == trainer && (x.ReservationStatus != "Disapproved")).ToList();
+            return Json(ReservationList, JsonRequestBehavior.AllowGet);
+        }
+        //custom code
+
 
         // POST: Reservations/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize]
         public ActionResult Create([Bind(Include = "Branch,Trainer,Date,Time")] Reservation reservation)
         {
             reservation.Customer = User.Identity.GetUserId();
-            reservation.ReservationStatus = "Waiting For Approval";
+            reservation.ReservationStatus = "Pending";
             if (ModelState.IsValid)
             {
                 db.Reservations.Add(reservation);
@@ -122,8 +140,8 @@ namespace FinalFitnessWorld.Controllers
                 return HttpNotFound();
             }
             ViewBag.Branch = new SelectList(db.Branches, "Id", "Name", reservation.Branch);
-            ViewBag.Customer = new SelectList(db.Customers, "Id", "Name", reservation.Customer);
-            ViewBag.Trainer = new SelectList(db.Trainers, "Id", "Name", reservation.Trainer);
+            //ViewBag.Customer = new SelectList(db.Customers, "Id", "Name", reservation.Customer);
+            ViewBag.Trainer = new SelectList(db.Trainers.Where(x => x.Branch == reservation.Branch), "Id", "Name", reservation.Trainer);
             return View(reservation);
         }
 
@@ -134,6 +152,10 @@ namespace FinalFitnessWorld.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,Customer,Branch,Trainer,Date,Time,ReservationStatus")] Reservation reservation)
         {
+            if (User.IsInRole("customer"))
+            {
+                reservation.ReservationStatus = "Pending";
+            }
             if (ModelState.IsValid)
             {
                 db.Entry(reservation).State = EntityState.Modified;
@@ -141,8 +163,8 @@ namespace FinalFitnessWorld.Controllers
                 return RedirectToAction("Index");
             }
             ViewBag.Branch = new SelectList(db.Branches, "Id", "Name", reservation.Branch);
-            ViewBag.Customer = new SelectList(db.Customers, "Id", "Name", reservation.Customer);
-            ViewBag.Trainer = new SelectList(db.Trainers, "Id", "Name", reservation.Trainer);
+            //ViewBag.Customer = new SelectList(db.Customers, "Id", "Name", reservation.Customer);
+            ViewBag.Trainer = new SelectList(db.Trainers.Where(x => x.Branch == reservation.Branch), "Id", "Name", reservation.Trainer);
             return View(reservation);
         }
 

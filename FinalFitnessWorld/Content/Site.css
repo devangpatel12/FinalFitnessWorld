@@ -32,6 +32,46 @@ textarea {
 
 /* Set the size of the div element that contains the map */
 #map {
-    height: 400px; /* The height is 400 pixels */
+    height: 500px; /* The height is 400 pixels */
     width: 100%; /* The width is the width of the web page */
 }
+
+#home {
+    background: 50% 0 repeat-y fixed;
+    -webkit-background-size: cover;
+    background-size: cover;
+    background-position: center center;
+    color: #ffffff;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    height: 50vh;
+}
+
+    #home h3 {
+        letter-spacing: 2px;
+    }
+
+    #home .btn {
+        background: #26253a;
+        border: none;
+        border-radius: 0px;
+        color: #999;
+        font-size: 20px;
+        font-weight: bold;
+        letter-spacing: 4px;
+        padding: 16px 38px;
+        margin-top: 28px;
+        transition: all 0.4s ease-in-out;
+    }
+
+        #home .btn:hover {
+            background: #ffffff;
+            color: #26253a;
+        }
+

@@ -40,10 +40,6 @@ namespace FinalFitnessWorld.Models
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<Customer>()
-                .Property(e => e.PhoneNo)
-                .HasPrecision(10, 0);
-
-            modelBuilder.Entity<Customer>()
                 .Property(e => e.latitude)
                 .HasPrecision(10, 4);
 
@@ -56,10 +52,6 @@ namespace FinalFitnessWorld.Models
                 .WithRequired(e => e.Customer1)
                 .HasForeignKey(e => e.Customer)
                 .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<Trainer>()
-                .Property(e => e.PhoneNo)
-                .HasPrecision(10, 0);
 
             modelBuilder.Entity<Trainer>()
                 .HasMany(e => e.Reservations)

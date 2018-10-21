@@ -5,17 +5,17 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h3>My Google Maps Demo</h3>
+
 <!--The div element for the map -->
 <p id="message"></p>
 <div id="map"></div>
 
 @if (User.IsInRole("admin"))
 {
-    <h2>Index</h2>
+    <h2>Branches List</h2>
 
     <p>
-        @Html.ActionLink("Create New", "Create")
+        @Html.ActionLink("Add New Branch", "Create")
     </p>
     <table class="table">
         <tr>
@@ -27,12 +27,6 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.latitude)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.longitude)
             </th>
             <th></th>
         </tr>
@@ -50,15 +44,9 @@
                     @Html.DisplayFor(modelItem => item.Description)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.latitude)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.longitude)
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                    @Html.ActionLink("Edit Details", "Edit", new { id = item.Id }) |
+                    @Html.ActionLink("View Details", "Details", new { id = item.Id }) |
+                    @Html.ActionLink("Remove Branch", "Delete", new { id = item.Id })
                 </td>
             </tr>
         }
@@ -98,6 +86,7 @@
                     //position: location,
                     position: { lat: currentLatLng.latitude, lng: currentLatLng.longitude },
                     map: map,
+                    animation: google.maps.Animation.BOUNCE,
                     title: "Your Location"
                 });
                 $.get("@Url.Action("GetBranchList","Branches")", function (data, status) {
@@ -113,9 +102,10 @@
                             //position: location,
                             position: { lat: data[i].latitude, lng: data[i].longitude },
                             map: map,
+                            icon:"/images/map_icon1.png",
                             title: "Click to View Details"
                         });
-                        contentString[i] = "<div style='height:60px;width:250px'><h4>" + data[i].Name + "</h4><b> <a href='/Branches/Details/" + data[i].Id + "'>Details</a></b></div>";
+                        contentString[i] = "<div style='height:60px;width:250px'><h4>" + data[i].Name + "</h4><b> <a href='/Branches/Details/" + data[i].Id + "'>View Details</a></b></div>";
                         infowindow[i] = new google.maps.InfoWindow({
                             content: contentString[i]
                         });
@@ -154,6 +144,6 @@
         * The callback parameter executes the initMap() function
         -->
         <script async defer
-                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSicQWRrIDaaH0ESOM3eKSsERxJhtvCRk&callback=initMap">
+                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSicQWRrIDaaH0ESOM3eKSsERxJhtvCRk&sensor=false&libraries=places&region=AU&callback=initMap">
         </script>
     }

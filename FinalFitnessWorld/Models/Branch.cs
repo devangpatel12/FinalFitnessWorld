@@ -18,6 +18,7 @@ namespace FinalFitnessWorld.Models
         public int Id { get; set; }
 
         [Required]
+        [Display(Name = "Branch Name")]
         public string Name { get; set; }
 
         [Required]

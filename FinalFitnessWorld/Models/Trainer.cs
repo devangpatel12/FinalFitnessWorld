@@ -25,8 +25,7 @@ namespace FinalFitnessWorld.Models
         [StringLength(256)]
         public string Email { get; set; }
 
-        [Column(TypeName = "numeric")]
-        public decimal? PhoneNo { get; set; }
+        public int? PhoneNo { get; set; }
 
         public int Branch { get; set; }
 

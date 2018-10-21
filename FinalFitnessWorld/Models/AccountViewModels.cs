@@ -66,6 +66,7 @@ namespace FinalFitnessWorld.Models
     public class RegisterViewModel
     {
         [Required]
+        [RegularExpression(@"^[A-Za-z ]+$", ErrorMessage = "Check your name")]
         [Display(Name = "Name")]
         public string Name { get; set; }
         

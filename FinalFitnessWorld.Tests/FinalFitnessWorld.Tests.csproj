@@ -102,6 +102,7 @@
     <Content Include="Contents\bootstrap-datepicker3.min.css" />
     <Content Include="Contents\bootstrap-datepicker3.standalone.css" />
     <Content Include="Contents\bootstrap-datepicker3.standalone.min.css" />
+    <Content Include="Content\jquery.timepicker.css" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
     <Content Include="Content\themes\base\autocomplete.css" />
@@ -150,6 +151,8 @@
     <Content Include="Scripts\jquery-1.12.4.min.js" />
     <Content Include="Scripts\jquery-ui-1.12.1.js" />
     <Content Include="Scripts\jquery-ui-1.12.1.min.js" />
+    <Content Include="Scripts\jquery.timepicker.js" />
+    <Content Include="Scripts\jquery.timepicker.min.js" />
     <Content Include="Scripts\locales\bootstrap-datepicker-en-CA.min.js" />
     <Content Include="Scripts\locales\bootstrap-datepicker.ar-tn.min.js" />
     <Content Include="Scripts\locales\bootstrap-datepicker.ar.min.js" />

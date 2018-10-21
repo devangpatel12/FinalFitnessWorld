@@ -1,13 +1,13 @@
 ﻿@model FinalFitnessWorld.Models.Reservation
 
 @{
-    ViewBag.Title = "Delete";
+    ViewBag.Title = "Cancel";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Delete</h2>
+<h2>Cancel</h2>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>Are you sure you want to cancel this?</h3>
 <div>
     <h4>Reservation</h4>
     <hr />
@@ -20,21 +20,26 @@
             @Html.DisplayFor(model => model.Branch1.Name)
         </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Customer1.Name)
-        </dt>
+        @if (User.IsInRole("trainer") | User.IsInRole("admin"))
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.Customer1.Name)
+            </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Customer1.Name)
-        </dd>
+            <dd>
+                @Html.DisplayFor(model => model.Customer1.Name)
+            </dd>
+        }
+        @if (User.IsInRole("customer") | User.IsInRole("admin"))
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.Trainer1.Name)
+            </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Trainer1.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Trainer1.Name)
-        </dd>
+            <dd>
+                @Html.DisplayFor(model => model.Trainer1.Name)
+            </dd>
+        }
 
         <dt>
             @Html.DisplayNameFor(model => model.Date)
@@ -66,8 +71,8 @@
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
+            <input type="submit" value="Cancel" class="btn btn-default" /> |
+            @Html.ActionLink("Back to Reservations List", "Index")
         </div>
     }
 </div>

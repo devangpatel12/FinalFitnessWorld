@@ -20,12 +20,13 @@ namespace FinalFitnessWorld.Models
         [StringLength(128)]
         public string Trainer { get; set; }
 
-        [Column(TypeName = "date")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd-MMM-yyyy}")]
         public DateTime Date { get; set; }
 
+       
         public TimeSpan Time { get; set; }
 
-        //[Required]
+        [Display(Name = "Reservation Status")]
         [StringLength(50)]
         public string ReservationStatus { get; set; }
 
