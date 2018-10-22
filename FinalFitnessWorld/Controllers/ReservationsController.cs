@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using FinalFitnessWorld.Models;
+using FinalFitnessWorld.Utils;
 using Microsoft.AspNet.Identity;
 
 namespace FinalFitnessWorld.Controllers
@@ -158,6 +159,28 @@ namespace FinalFitnessWorld.Controllers
             }
             if (ModelState.IsValid)
             {
+                if (reservation.ReservationStatus.Equals("Approved"))
+                {
+                    Customer customer = db.Customers.Find(reservation.Customer);
+                    String toEmail = customer.Email;
+                    String subject = "Approval Notification";
+                    String contents = "Your Reservation Booking on " + reservation.Date.Date + ", " + reservation.Time + " with our trainer has been Approved";
+
+                    EmailSender es = new EmailSender();
+                    es.Send(toEmail, subject, contents);
+                }
+
+                if (reservation.ReservationStatus.Equals("Disapproved"))
+                {
+                    Customer customer = db.Customers.Find(reservation.Customer);
+                    String toEmail = customer.Email;
+                    String subject = "Disapproval Notification";
+                    String contents = "Your Reservation Booking on " + reservation.Date.Date + ", " + reservation.Time + " with our trainer has been Disapproved";
+
+                    EmailSender es = new EmailSender();
+                    es.Send(toEmail, subject, contents);
+                }
+                    
                 db.Entry(reservation).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
